@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VitalPlate | AI Diet Dashboard</title>
+    <style>
+        :root {
+            --primary: #27ae60;
+            --secondary: #2ecc71;
+            --dark: #2c3e50;
+            --bg: #f8faf9;
+            --white: #ffffff;
+            --shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg);
+            margin: 0;
+            color: var(--dark);
+        }
+
+        header {
+            background: var(--primary);
+            color: white;
+            padding: 2.5rem 1rem;
+            text-align: center;
+            clip-path: ellipse(150% 100% at 50% 0%);
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: -40px auto 40px;
+            padding: 0 20px;
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 25px;
+        }
+
+        .card {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        h2 { margin-top: 0; font-size: 1.4rem; color: var(--primary); display: flex; align-items: center; gap: 10px; }
+        
+        .input-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.85rem; color: #7f8c8d; }
+        
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #edf2f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: border 0.3s;
+        }
+
+        input:focus { border-color: var(--primary); outline: none; }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(39, 174, 96, 0.3);
+        }
+
+        button:hover { background: var(--secondary); transform: translateY(-1px); }
+
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th { text-align: left; color: #bdc3c7; font-size: 0.75rem; letter-spacing: 1px; padding-bottom: 10px; }
+        td { padding: 15px 0; border-bottom: 1px solid #f1f1f1; font-weight: 500; }
+
+        .result-display {
+            margin-top: 25px;
+            padding: 20px;
+            background: #f0fff4;
+            border: 2px dashed var(--primary);
+            border-radius: 15px;
+            text-align: center;
+            display: none;
+        }
+
+        @media (max-width: 850px) {
+            .container { grid-template-columns: 1fr; margin-top: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>VitalPlate AI</h1>
+    <p>Your Smart Static Health Companion</p>
+</header>
+
+<div class="container">
+    <div class="card">
+        <h2>📊 Calorie Engine</h2>
+        <div class="input-group">
+            <label>Weight (kg)</label>
+            <input type="number" id="weight" placeholder="e.g. 75">
+        </div>
+        <div class="input-group">
+            <label>Height (cm)</label>
+            <input type="number" id="height" placeholder="e.g. 180">
+        </div>
+        <div class="input-group">
+            <label>Age (years)</label>
+            <input type="number" id="age" placeholder="e.g. 28">
+        </div>
+        <div class="input-group">
+            <label>Gender</label>
+            <select id="gender">
+                <option value="5">Male</option>
+                <option value="-161">Female</option>
+            </select>
+        </div>
+        <button onclick="calculate()">Generate My Profile</button>
+        
+        <div id="resultBox" class="result-display">
+            <span style="color: #666; font-size: 0.9rem;">Daily Maintenance Target:</span>
+            <h1 id="kcalOutput" style="margin: 5px 0; color: var(--primary);">0 kcal</h1>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>🍴 Nutrition Blueprint</h2>
+        <table>
+            <thead>
+                <tr><th>PERIOD</th><th>SUGGESTION</th><th>EST. KCAL</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>🌅 Breakfast</td><td>Greek Yogurt & Nuts</td><td>380</td></tr>
+                <tr><td>🏙️ Lunch</td><td>Grilled Salmon & Greens</td><td>620</td></tr>
+                <tr><td>🍿 Snack</td><td>Protein Shake</td><td>180</td></tr>
+                <tr><td>🌙 Dinner</td><td>Lean Beef & Broccoli</td><td>700</td></tr>
+            </tbody>
+        </table>
+        <div style="margin-top: 30px; font-size: 0.8rem; color: #95a5a6; background: #fdfdfd; padding: 10px; border-radius: 8px;">
+            Tip: Use the AI Chat on the bottom right for specific food swaps!
+        </div>
+    </div>
+</div>
+
+<script>
+    function calculate() {
+        const w = document.getElementById('weight').value;
+        const h = document.getElementById('height').value;
+        const a = document.getElementById('age').value;
+        const g = parseInt(document.getElementById('gender').value);
+
+        if(w && h && a) {
+            const bmr = (10 * w) + (6.25 * h) - (5 * a) + g;
+            document.getElementById('kcalOutput').innerText = Math.round(bmr) + " kcal";
+            document.getElementById('resultBox').style.display = 'block';
+        } else {
+            alert("Please provide your measurements!");
+        }
+    }
+</script>
+
+<script
+  src="https://www.chatbase.co/embed.min.js"
+  chatbotId="DtWxhavVO4QsmAmaUEPj1"
+  domain="www.chatbase.co"
+  defer>
+</script>
+
+</body>
+</html>
